@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.pokedex.ui.viewModel.PokemonViewModel
+import com.vorue.pokedex.android.ui.viewModel.PokemonViewModel
 import com.vorue.pokedex.android.R
 import com.vorue.pokedex.data.network.PokedexResults
 import com.vorue.pokedex.android.libraries.ImageBuilder

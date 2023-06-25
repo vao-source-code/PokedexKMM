@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vorue.pokedex.android.domain.factory.PokedexScreenState
 import com.vorue.pokedex.data.network.Pokedex
-import com.vorue.pokedex.android.domain.PokedexRepository
+import com.vorue.pokedex.core.PokedexService
+import com.vorue.pokedex.repository.PokedexRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class PokedexViewModel(private val pokedexRepository: PokedexRepository) : ViewModel() {
+class PokedexViewModel() : ViewModel() {
 
     val pokedex = MutableLiveData<Pokedex>()
 
@@ -29,11 +30,12 @@ class PokedexViewModel(private val pokedexRepository: PokedexRepository) : ViewM
     init {
         viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
+                val pokedexRepository =  PokedexRepository()
                 pokedexRepository.getPokedex()
             }.onSuccess {
-                if (it.body() != null) {
-                    pokedex.postValue(it.body()!!)
-                    _screenState.value = PokedexScreenState.ShowPokedex(it.body()!!)
+                if (it != null) {
+                    pokedex.postValue(it)
+                    _screenState.value = PokedexScreenState.ShowPokedex(it)
                 } else {
                     _screenState.value = PokedexScreenState.Error
                 }
@@ -46,15 +48,16 @@ class PokedexViewModel(private val pokedexRepository: PokedexRepository) : ViewM
     }
 
     //Agregar buscador de pokemon
-    /*
+
       fun searchPokemon(pokemonName: String) {
         viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
-                pokedexRepository.searchPokemon(pokemonName)
+                val pokedexRepository =  PokedexService()
+                pokedexRepository.search(pokemonName)
             }.onSuccess {
-                if (it.body() != null) {
-                    pokedex.postValue(it.body()!!)
-                    _screenState.value = PokedexScreenState.ShowPokedex(it.body()!!)
+                if (it!= null) {
+                    pokedex.postValue(it)
+                    _screenState.value = PokedexScreenState.ShowPokedex(it)
                 } else {
                     _screenState.value = PokedexScreenState.Error
                 }
@@ -65,7 +68,7 @@ class PokedexViewModel(private val pokedexRepository: PokedexRepository) : ViewM
 
         }
     }
-     */
+
 
 
 }

@@ -52,6 +52,7 @@ dependencies {
     val coroutines_version = "1.3.9"
     val lifecycle_version = "2.5.1"
     val dagger_version = "2.38.1"
+    val ktor_version = "2.0.0-beta-1"
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
@@ -96,6 +97,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     implementation ("com.github.bumptech.glide:glide:4.13.0")
+
+    //KTOR
+    implementation("io.ktor:ktor-client-core:$ktor_version")
 
 
 }
