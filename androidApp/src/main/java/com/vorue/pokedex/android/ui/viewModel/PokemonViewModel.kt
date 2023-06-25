@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class PokemonViewModel : ViewModel() {
 
-    val pokemon = MutableLiveData<Pokemon>()
+    val pokemon = MutableLiveData<PokedexResults>()
 
 
     fun setPokemon(id: Int) {

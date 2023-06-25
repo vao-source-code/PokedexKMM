@@ -2,6 +2,7 @@ package com.vorue.pokedex.android.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import com.vorue.pokedex.android.databinding.ActivityMainBinding
 import com.vorue.pokedex.android.domain.factory.PokedexScreenState
 import com.vorue.pokedex.android.domain.factory.PokedexViewModelFactory
 import com.vorue.pokedex.android.ui.viewModel.PokedexViewModel
+import com.vorue.pokedex.libraries.KMMStorage
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListener {
@@ -130,6 +132,18 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
             "id",
             pokedexAdapter.searchPokedex(position).url.split('/')[6].toInt()
         )
+        loadFromSP()
         startActivity(intent)
+    }
+
+    fun loadFromSP() {
+        var kmmStorage = KMMStorage(this)
+        var count  = kmmStorage.getInt("count")
+        count++
+        kmmStorage.putInt("count", count)
+
+        kmmStorage.putString("name", "Vorue")
+
+        Log.d("KMMStorage", "count: ${kmmStorage.getInt("count")}")
     }
 }

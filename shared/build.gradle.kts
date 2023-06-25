@@ -41,6 +41,10 @@ kotlin {
                 //SERIALIZATION
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+                //MULTIPLATFORM SETTINGS
+                implementation("com.russhwolf:multiplatform-settings:1.0.0-RC")
+
             }
 
 
