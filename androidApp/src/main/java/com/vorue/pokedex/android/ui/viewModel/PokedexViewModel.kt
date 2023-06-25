@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vorue.pokedex.android.domain.factory.PokedexScreenState
-import com.vorue.pokedex.android.data.network.Pokedex
+import com.vorue.pokedex.data.network.Pokedex
 import com.vorue.pokedex.android.domain.PokedexRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow

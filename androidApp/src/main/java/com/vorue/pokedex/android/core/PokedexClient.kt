@@ -1,6 +1,6 @@
 package com.vorue.pokedex.android.core
 
-import com.vorue.pokedex.android.data.network.Pokedex
+import com.vorue.pokedex.data.network.Pokedex
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,7 +1,7 @@
 package com.vorue.pokedex.android.domain
 
 import com.vorue.pokedex.android.core.PokedexClient
-import com.vorue.pokedex.android.data.network.Pokedex
+import com.vorue.pokedex.data.network.Pokedex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response

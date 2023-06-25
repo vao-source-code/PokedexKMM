@@ -1,6 +1,16 @@
 package com.vorue.pokedex.android.data.network.pokemon
 
 import com.google.gson.annotations.SerializedName
+import com.vorue.pokedex.data.network.pokemon.Abilities
+import com.vorue.pokedex.data.network.pokemon.Ability
+import com.vorue.pokedex.data.network.pokemon.Move
+import com.vorue.pokedex.data.network.pokemon.Moves
+import com.vorue.pokedex.data.network.pokemon.Species
+import com.vorue.pokedex.data.network.pokemon.Sprites
+import com.vorue.pokedex.data.network.pokemon.Stat
+import com.vorue.pokedex.data.network.pokemon.Stats
+import com.vorue.pokedex.data.network.pokemon.Type
+import com.vorue.pokedex.data.network.pokemon.Types
 
 
 data class Pokemon(

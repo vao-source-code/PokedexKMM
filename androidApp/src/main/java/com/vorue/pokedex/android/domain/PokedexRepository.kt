@@ -1,6 +1,6 @@
 package com.vorue.pokedex.android.domain
 
-import com.vorue.pokedex.android.data.network.Pokedex
+import com.vorue.pokedex.data.network.Pokedex
 import retrofit2.Response
 
 interface PokedexRepository {

@@ -1,6 +1,7 @@
 package com.vorue.pokedex.android.data.network
 
 import com.google.gson.annotations.SerializedName
+import com.vorue.pokedex.data.network.PokedexResults
 
 data class Pokedex(
     @SerializedName(value = "count")

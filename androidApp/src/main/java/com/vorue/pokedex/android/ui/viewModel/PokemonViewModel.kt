@@ -3,7 +3,7 @@ package com.example.pokedex.ui.viewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.vorue.pokedex.android.data.network.PokedexResults
+import com.vorue.pokedex.data.network.PokedexResults
 
 class PokemonViewModel : ViewModel() {
 
