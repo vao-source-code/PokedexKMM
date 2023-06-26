@@ -16,12 +16,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vorue.pokedex.android.R
-import com.vorue.pokedex.data.network.Pokedex
-import com.vorue.pokedex.data.network.PokedexResults
 import com.vorue.pokedex.android.databinding.ActivityMainBinding
 import com.vorue.pokedex.android.domain.factory.PokedexScreenState
 import com.vorue.pokedex.android.domain.factory.PokedexViewModelFactory
 import com.vorue.pokedex.android.ui.viewModel.PokedexViewModel
+import com.vorue.pokedex.data.network.Pokedex
+import com.vorue.pokedex.data.network.PokedexResults
 import com.vorue.pokedex.libraries.KMMStorage
 import kotlinx.coroutines.launch
 
@@ -30,9 +30,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
     private lateinit var pokedexAdapter: PokedexAdapter
     private lateinit var viewModel: PokedexViewModel
     private lateinit var binding: ActivityMainBinding
-    protected var search_menu_item: MenuItem? = null
-    protected var search_text: String? = null
-    protected var searchView: SearchView? = null
+    private lateinit var searchMenuItem: MenuItem
+    private var searchText: String? = null
+    private var searchView: SearchView? = null
+    private lateinit var menuItemFavorites: MenuItem
+    var kmmStorage = KMMStorage(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,37 +69,51 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_pokedex_main, menu)
-        search_menu_item = menu.findItem(R.id.action_search)
-        searchView = search_menu_item!!.actionView as SearchView
+        searchMenuItem = menu.findItem(R.id.action_search)
+        searchView = searchMenuItem!!.actionView as SearchView
         searchView!!.queryHint = "Search Pokemon"
         searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                search_text = query
+                searchText = query
                 searchView!!.clearFocus()
                 searchView!!.onActionViewCollapsed()
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                search_text = newText
-                if (search_text != null && search_text!!.length >= 2) {
+                searchText = newText
+                if (searchText != null && searchText!!.length >= 2) {
                     val auxList: ArrayList<PokedexResults> =
                         ArrayList<PokedexResults>()
                     for (each in pokedexAdapter.getPokemonList() as ArrayList<PokedexResults>) {
 
                         if (each.name != null && each.name.toLowerCase()
-                                .contains(search_text.toString().toLowerCase())
+                                .contains(searchText.toString().toLowerCase())
                         ) auxList.add(each)
                     }
                     pokedexAdapter.updatePokedex(auxList)
-                }else{
+                } else {
                     pokedexAdapter.updatePokedex(null)
                 }
                 return false
             }
         })
+
+        menuItemFavorites = menu.findItem(R.id.filter_by_favorites)
+        menuItemFavorites.isChecked = kmmStorage.getBoolean(PokedexViewModel.favorites)
+
         return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val actions: MutableMap<Int, Runnable> = HashMap()
+        actions[R.id.filter_by_favorites] = Runnable { this.menuFilterFavorites() }
+
+        val action = actions[item.itemId]
+        action?.run()
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun setupRecyclerView() {
         pokedexAdapter = PokedexAdapter(this)
@@ -113,6 +129,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
     private fun showPokedex(pokedex: Pokedex) {
         binding.pokedexProgressBar.visibility = View.GONE
         pokedexAdapter.initPokedex(pokedex.results)
+        //preguntar si esta habilitado en favoritos
+        if (PokedexViewModel.menu_favorites) {
+            pokedexAdapter.filterFavoritesPokedex()
+        }
     }
 
     // Esto se debe delegar a un view model
@@ -136,9 +156,20 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         startActivity(intent)
     }
 
+    fun menuFilterFavorites() {
+        val newValue = !menuItemFavorites.isChecked
+        kmmStorage.putBoolean(PokedexViewModel.favorites, newValue)
+        menuItemFavorites.isChecked = newValue
+        if (newValue) {
+            pokedexAdapter.filterFavoritesPokedex()
+        } else {
+            pokedexAdapter.initPokedex(pokedexAdapter.pokemonListOrigin)
+        }
+    }
+
     fun loadFromSP() {
         var kmmStorage = KMMStorage(this)
-        var count  = kmmStorage.getInt("count")
+        var count = kmmStorage.getInt("count")
         count++
         kmmStorage.putInt("count", count)
 

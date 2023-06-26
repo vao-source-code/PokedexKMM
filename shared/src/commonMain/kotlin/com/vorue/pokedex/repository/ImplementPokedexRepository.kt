@@ -6,6 +6,7 @@ interface ImplementPokedexRepository {
 
     suspend fun getPokedex(): Pokedex
 
+
     suspend fun searchPokemon(name: String): Pokedex
 
 }

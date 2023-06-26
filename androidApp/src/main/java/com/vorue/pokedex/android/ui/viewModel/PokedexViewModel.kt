@@ -22,6 +22,11 @@ class PokedexViewModel() : ViewModel() {
     )
     val screenState: Flow<PokedexScreenState> = _screenState
 
+    companion object {
+        const val favorites = "menu_key_favorites"
+        var menu_favorites = false
+    }
+
     private val coroutineExceptionHandler =
         CoroutineExceptionHandler { coroutineContext, throwable ->
             Log.d("PokedexViewModel", "Error retrieving pokedex: ${throwable.message}")
@@ -30,8 +35,8 @@ class PokedexViewModel() : ViewModel() {
     init {
         viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
-                val pokedexRepository =  PokedexRepository()
-                pokedexRepository.getPokedex()
+                val pokedexRepository =  PokedexService()
+                pokedexRepository.get()
             }.onSuccess {
                 if (it != null) {
                     pokedex.postValue(it)

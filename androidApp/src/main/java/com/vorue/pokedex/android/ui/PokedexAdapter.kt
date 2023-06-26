@@ -14,7 +14,7 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
     RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder>() {
 
     private var pokemonList = mutableListOf<PokedexResults>()
-    private val pokemonListOrigin = mutableListOf<PokedexResults>()
+    public val pokemonListOrigin = mutableListOf<PokedexResults>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokedexViewHolder {
@@ -59,6 +59,34 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
             pokemonList.clear()
             pokemonList.addAll(pokemonListOrigin)
         }
+        notifyDataSetChanged()
+    }
+
+    fun filterPokedex(text: String) {
+        val filteredList = mutableListOf<PokedexResults>()
+        if (text.isEmpty()) {
+            filteredList.addAll(pokemonListOrigin)
+        } else {
+            for (pokemon in pokemonListOrigin) {
+                if (pokemon.name.toLowerCase().contains(text.toLowerCase())) {
+                    filteredList.add(pokemon)
+                }
+            }
+        }
+        pokemonList.clear()
+        pokemonList.addAll(filteredList)
+        notifyDataSetChanged()
+    }
+
+    fun filterFavoritesPokedex() {
+        val filteredList = mutableListOf<PokedexResults>()
+        for (pokemon in pokemonListOrigin) {
+            if (pokemon.favorite) {
+                filteredList.add(pokemon)
+            }
+        }
+        pokemonList.clear()
+        pokemonList.addAll(filteredList)
         notifyDataSetChanged()
     }
 

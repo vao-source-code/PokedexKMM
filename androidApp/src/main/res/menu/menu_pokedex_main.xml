@@ -13,4 +13,11 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         />
 
+    <item
+        android:id="@+id/filter_by_favorites"
+        android:orderInCategory="100"
+        android:checkable="true"
+        android:title="Filtrar por favoritos"
+        app:showAsAction="never" />
+
 </menu>

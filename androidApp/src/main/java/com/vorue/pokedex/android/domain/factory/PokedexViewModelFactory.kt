@@ -9,8 +9,6 @@ class PokedexViewModelFactory : ViewModelProvider.Factory {
     // Esta muy simple el factory, pero es la forma de crear un ViewModel con un constructor
     // que recibe parametros
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PokedexViewModel(
-
-        ) as T
+        return PokedexViewModel() as T
     }
 }

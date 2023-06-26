@@ -18,4 +18,12 @@ class KMMStorage(val context: SPref) {
     fun putString(key: String, value: String) {
         context.setString(key,value)
     }
+
+    fun getBoolean(s: String): Boolean {
+        return context.getBoolean(s)
+    }
+
+    fun putBoolean(key: String, value: Boolean) {
+        context.setBoolean(key,value)
+    }
 }
