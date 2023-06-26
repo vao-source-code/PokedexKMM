@@ -1,5 +1,6 @@
 package com.vorue.pokedex.android.ui
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import com.vorue.pokedex.android.databinding.ItemPokedexBinding
 import com.vorue.pokedex.android.libraries.ImageBuilder
 import com.vorue.pokedex.android.libraries.StringFormatter
 
-class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
+class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener , val onsetFavoriteListener: RecyclerViewInterface.onItemSetFavoriteListener) :
     RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder>() {
 
     private var pokemonList = mutableListOf<PokedexResults>()
@@ -29,6 +30,10 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
 
         holder.binding.iconImageView.setOnClickListener {
             onclick.onItemClick(position)
+        }
+
+        holder.binding.favoriteButton.setOnClickListener {
+            onsetFavoriteListener.onItemSetFavorite(position)
         }
         PokedexViewHolder(holder.binding).bind(pokemon)
 
@@ -94,6 +99,13 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
         return pokemonList[id]
     }
 
+    fun setFavorite(position: Int) {
+        pokemonList[position].favorite = !pokemonList[position].favorite
+
+                notifyDataSetChanged()
+
+    }
+
 
     // mejorar view holder
     class PokedexViewHolder(
@@ -107,6 +119,13 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener) :
                 .placeholder(R.drawable.pokeball)
                 .error(R.drawable.pokeball) // cambiar icono
                 .into(binding.iconImageView)
+
+
+            if(pokemon.favorite){
+                binding.favoriteButton.setImageResource(R.drawable.icon_favorite_save)
+            }else{
+                binding.favoriteButton.setImageResource(R.drawable.icon_favorite)
+            }
 
         }
 

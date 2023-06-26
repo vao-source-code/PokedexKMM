@@ -36,6 +36,7 @@ actual fun SPref.getBoolean(key: String) : Boolean{
     return prefs.getBoolean(key, false)
 }
 
+
 actual fun SPref.setBoolean(key: String, value: Boolean) {
     val prefs: SharedPreferences = this.getSharedPreferences("", Context.MODE_PRIVATE)
     val editor = prefs.edit()

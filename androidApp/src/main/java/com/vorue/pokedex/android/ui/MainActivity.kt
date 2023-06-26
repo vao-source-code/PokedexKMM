@@ -25,7 +25,7 @@ import com.vorue.pokedex.data.network.PokedexResults
 import com.vorue.pokedex.libraries.KMMStorage
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListener {
+class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListener , RecyclerViewInterface.onItemSetFavoriteListener{
 
     private lateinit var pokedexAdapter: PokedexAdapter
     private lateinit var viewModel: PokedexViewModel
@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
                 }
             }
         }
+
+
     }
 
     override fun onRestart() {
@@ -116,7 +118,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
 
 
     private fun setupRecyclerView() {
-        pokedexAdapter = PokedexAdapter(this)
+        pokedexAdapter = PokedexAdapter(this , this)
         val gridLayoutManager = GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false)
         with(binding.rvPokedex) {
             this.layoutManager = gridLayoutManager
@@ -130,7 +132,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         binding.pokedexProgressBar.visibility = View.GONE
         pokedexAdapter.initPokedex(pokedex.results)
         //preguntar si esta habilitado en favoritos
-        if (PokedexViewModel.menu_favorites) {
+        if (kmmStorage.getBoolean(PokedexViewModel.favorites)) {
             pokedexAdapter.filterFavoritesPokedex()
         }
     }
@@ -162,8 +164,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         menuItemFavorites.isChecked = newValue
         if (newValue) {
             pokedexAdapter.filterFavoritesPokedex()
+
         } else {
-            pokedexAdapter.initPokedex(pokedexAdapter.pokemonListOrigin)
+            pokedexAdapter.updatePokedex(pokedexAdapter.pokemonListOrigin)
         }
     }
 
@@ -176,5 +179,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         kmmStorage.putString("name", "Vorue")
 
         Log.d("KMMStorage", "count: ${kmmStorage.getInt("count")}")
+    }
+
+    override fun onItemSetFavorite(position: Int) {
+        pokedexAdapter.setFavorite(position)
     }
 }

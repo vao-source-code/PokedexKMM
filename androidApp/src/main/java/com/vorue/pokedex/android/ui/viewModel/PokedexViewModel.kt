@@ -24,7 +24,6 @@ class PokedexViewModel() : ViewModel() {
 
     companion object {
         const val favorites = "menu_key_favorites"
-        var menu_favorites = false
     }
 
     private val coroutineExceptionHandler =
