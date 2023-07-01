@@ -2,6 +2,8 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("com.squareup.sqldelight")
+
 }
 
 android {
@@ -104,6 +106,9 @@ dependencies {
     //Normalize
     implementation ("com.intuit.ssp:ssp-android:1.1.0")
     implementation ("com.intuit.sdp:sdp-android:1.1.0")
+
+    //SQLLight
+    implementation("com.squareup.sqldelight:android-driver:1.5.5")
 
 
 

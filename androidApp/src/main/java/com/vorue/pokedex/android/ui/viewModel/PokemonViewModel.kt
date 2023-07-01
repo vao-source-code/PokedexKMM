@@ -13,7 +13,7 @@ class PokemonViewModel : ViewModel() {
     val pokemon = MutableLiveData<PokedexResults>()
 
 
-    fun setPokemon(id: Int) {
+    fun setPokemon(id: Long) {
        /*viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
                 val pokedexRepository =  PokedexRepository()

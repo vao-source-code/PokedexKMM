@@ -2,6 +2,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization") version "1.6.10"
+    id("com.squareup.sqldelight")
+
 }
 
 kotlin {
@@ -45,6 +47,10 @@ kotlin {
                 //MULTIPLATFORM SETTINGS
                 implementation("com.russhwolf:multiplatform-settings:1.0.0-RC")
 
+                //SQLLight
+                implementation("com.squareup.sqldelight:runtime:1.5.5")
+
+
             }
 
 
@@ -57,6 +63,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("com.squareup.sqldelight:android-driver:1.5.5")
+
             }
         }
         val androidUnitTest by getting
@@ -64,6 +72,14 @@ kotlin {
 
     }
 }
+
+sqldelight {
+    database("PokedexDatabase") {
+        packageName = "com.vorue.pokedex.database"
+        sourceFolders = listOf("sqldelight")
+    }
+}
+
 
 
 android {

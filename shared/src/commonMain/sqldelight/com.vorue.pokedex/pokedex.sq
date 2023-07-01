@@ -1,0 +1,30 @@
+CREATE TABLE PokedexResults (
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    id INTEGER NOT NULL,
+    favorite INTEGER DEFAULT 0,  --0 = false, 1 = true
+    PRIMARY KEY (id)
+);
+
+
+getAllPokedexResults:
+SELECT * FROM PokedexResults ORDER BY id DESC;
+
+getPokedexResultId:
+SELECT * FROM PokedexResults WHERE id = ?;
+
+searchPokedexResultName:
+SELECT * FROM PokedexResults WHERE name = ?;
+
+insertPokedexResult:
+INSERT OR REPLACE
+INTO PokedexResults (id , name, url, favorite) VALUES (?, ?, ?, ?);
+
+deletePokedexResult:
+DELETE FROM PokedexResults WHERE id = ?;
+
+updatePokedexResultFavorite:
+UPDATE PokedexResults SET favorite = ? WHERE id = ?;
+
+updatePokedexResult:
+UPDATE PokedexResults SET  name = ?, url = ? , favorite = ? WHERE id = ?;

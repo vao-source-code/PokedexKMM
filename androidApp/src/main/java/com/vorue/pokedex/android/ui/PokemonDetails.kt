@@ -17,14 +17,14 @@ class PokemonDetails : AppCompatActivity() {
     private lateinit var pokemon: PokedexResults
     private val pokemonViewModel : PokemonViewModel by viewModels()
 
-    /*--------------------- Lyfe Cycle -----------------------------------------------------------*/
+    /*--------------------- Life Cycle -----------------------------------------------------------*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityPokemonDetailsBinding = ActivityPokemonDetailsBinding.inflate(layoutInflater)
         setContentView(activityPokemonDetailsBinding.root)
         val name = intent.extras!!.getString("name")!!
-        val id = intent.extras!!.getInt("id")
+        val id = intent.extras!!.getLong("id")
 
          pokemon = PokedexResults(id = id, name = name, url = "https://pokeapi.co/api/v2/pokemon/$id/")
 
@@ -43,7 +43,7 @@ class PokemonDetails : AppCompatActivity() {
 
     /*--------------------- Private Methods -------------------------------------------------------*/
 
-    private fun initPokemon(valor: String, id: Int) {
+    private fun initPokemon(valor: String, id: Long) {
         //Buscar el pokemon y traer todos los datos
         pokemonViewModel.setPokemon(id)
 

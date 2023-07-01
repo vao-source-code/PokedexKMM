@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         setupRecyclerView()
 
         // Esto se debe delegar a un view model que trabaje mejor esto y no se tenga que hacer en el activity
-        viewModel = ViewModelProvider(this, PokedexViewModelFactory())[PokedexViewModel::class.java]
+        viewModel = ViewModelProvider(this, PokedexViewModelFactory(this))[PokedexViewModel::class.java]
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.screenState.collect {

@@ -11,6 +11,6 @@ data class PokedexResults(
     val name: String,
     @SerialName(value = "url")
     val url: String,
-    val id: Int = url.split('/')[6].toInt(),
+    val id: Long = url.split('/')[6].toLong(),
     var favorite : Boolean = false
 )
