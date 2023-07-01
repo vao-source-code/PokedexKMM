@@ -87,7 +87,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
 
     /*------------------- Override Method -------------------------------------------------------*/
     override fun onItemSetFavorite(position: Int) {
-        pokedexAdapter.setFavorite(position)
+        //pokedexAdapter.setFavorite(position)
+        val pokedex = pokedexAdapter.searchPokedex(position)
+        pokedex.favorite = !pokedex.favorite
+        viewModel.savePokemon(pokedex)
+        pokedexAdapter.notifyDataSetChanged()
     }
 
     override fun onItemClick(position: Int) {
@@ -106,11 +110,17 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         binding.pokedexProgressBar.visibility = View.GONE
         pokedexAdapter.initPokedex(pokedex.results)
         if (kmmStorage.getBoolean(PokedexViewModel.favorites)) {
+            //TODO tiene que filtrarlo el datasource y no el adapter
             pokedexAdapter.filterFavoritesPokedex()
         }
     }
 
     private fun handlerError() {
+        binding.pokedexProgressBar.visibility = View.GONE
+        pokedexAdapter.initPokedex(viewModel.pokedexDataSource.getPokedex())
+        if (kmmStorage.getBoolean(PokedexViewModel.favorites)) {
+            pokedexAdapter.filterFavoritesPokedex()
+        }
         Toast.makeText(this, "Error buscando la informacion", Toast.LENGTH_LONG).show()
     }
 
@@ -137,7 +147,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
                 if (searchText!!.length >= 2) {
                     val auxList: ArrayList<PokedexResults> =
                         ArrayList<PokedexResults>()
-                    for (each in pokedexAdapter.getPokemonList() as ArrayList<PokedexResults>) {
+                    viewModel.searchPokemon(newText)
+                    for (each in viewModel.getAllSavePokemon() as ArrayList<PokedexResults>) {
 
                         if (each.name.toLowerCase()
                                 .contains(searchText.toString().toLowerCase())
@@ -170,6 +181,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInterface.OnItemClickListe
         val newValue = !menuItemFavorites.isChecked
         kmmStorage.putBoolean(PokedexViewModel.favorites, newValue)
         menuItemFavorites.isChecked = newValue
+
         if (newValue) {
             pokedexAdapter.filterFavoritesPokedex()
 

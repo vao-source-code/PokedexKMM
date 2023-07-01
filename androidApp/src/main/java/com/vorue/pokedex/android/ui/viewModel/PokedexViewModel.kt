@@ -9,6 +9,7 @@ import com.vorue.pokedex.DatabaseDriverFactory
 import com.vorue.pokedex.android.domain.factory.PokedexScreenState
 import com.vorue.pokedex.data.network.Pokedex
 import com.vorue.pokedex.core.PokedexService
+import com.vorue.pokedex.data.network.PokedexResults
 import com.vorue.pokedex.repository.PokedexDataSource
 import com.vorue.pokedex.repository.PokedexRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,9 +26,10 @@ class PokedexViewModel(context: Context) : ViewModel() {
     )
     val screenState: Flow<PokedexScreenState> = _screenState
 
-     var pokedexDataSource : PokedexDataSource
+    var pokedexDataSource: PokedexDataSource
+
     init {
-         pokedexDataSource = PokedexDataSource(DatabaseDriverFactory(context))
+        pokedexDataSource = PokedexDataSource(DatabaseDriverFactory(context))
 
     }
 
@@ -43,28 +45,40 @@ class PokedexViewModel(context: Context) : ViewModel() {
     init {
         viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
-                val pokedexRepository =  PokedexService()
+                val pokedexRepository = PokedexService()
                 pokedexRepository.get()
             }.onSuccess {
                 if (it != null) {
-                    it.results.forEach {
-                        pokedexDataSource.insertPokedex(it)
+                    it.results.forEach { pd->
+                        if (!pokedexDataSource.existPokedex(pd.id)) {
+                            pokedexDataSource.insertPokedex(pd)
+                        }else {
+                            pd.favorite = pokedexDataSource.searchPokedex(pd.id).favorite
+                            pokedexDataSource.updatePokedex(pd)
+                        }
                     }
                     pokedex.postValue(it)
                     _screenState.value = PokedexScreenState.ShowPokedex(it)
                 } else {
                     _screenState.value = PokedexScreenState.Error
-                    val pokedexEror = Pokedex(
+                    val pokedexError = Pokedex(
                         count = 0,
                         next = "",
                         previous = "",
                         results = pokedexDataSource.getPokedex()
                     )
-                    pokedex.postValue(pokedexEror)
+                    pokedex.postValue(pokedexError)
 
                 }
             }.onFailure {
                 Log.d("PokedexViewModel", "Error retrieving pokedex: ${it.message}")
+                val pokedexError = Pokedex(
+                    count = 0,
+                    next = "",
+                    previous = "",
+                    results = pokedexDataSource.getPokedex()
+                )
+                pokedex.postValue(pokedexError)
                 _screenState.value = PokedexScreenState.Error
             }
 
@@ -73,16 +87,24 @@ class PokedexViewModel(context: Context) : ViewModel() {
 
     //Agregar buscador de pokemon
 
-      fun searchPokemon(pokemonName: String) {
+    fun searchPokemon(pokemonName: String) {
         viewModelScope.launch(coroutineExceptionHandler) {
             kotlin.runCatching {
-                val pokedexRepository =  PokedexService()
-                pokedexRepository.search(pokemonName)
+                Pokedex(
+                    count = 0,
+                    next = "",
+                    previous = "",
+                    results = pokedexDataSource.searchPokedex(pokemonName)
+                )
             }.onSuccess {
-                if (it!= null) {
+                if (it != null) {
+
                     pokedex.postValue(it)
                     _screenState.value = PokedexScreenState.ShowPokedex(it)
+
                 } else {
+                    val pokedexRepository = PokedexService()
+                    pokedex.postValue(pokedexRepository.get())
                     _screenState.value = PokedexScreenState.Error
                 }
             }.onFailure {
@@ -91,8 +113,16 @@ class PokedexViewModel(context: Context) : ViewModel() {
             }
 
         }
+
     }
 
 
+    fun savePokemon(pokemon: PokedexResults) {
+        pokedexDataSource.updatePokedex(pokemon)
+    }
 
+
+    fun getAllSavePokemon(): List<PokedexResults> {
+        return pokedexDataSource.getPokedex()
+    }
 }

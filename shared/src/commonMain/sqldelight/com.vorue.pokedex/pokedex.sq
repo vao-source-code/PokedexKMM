@@ -16,9 +16,12 @@ SELECT * FROM PokedexResults WHERE id = ?;
 searchPokedexResultName:
 SELECT * FROM PokedexResults WHERE name = ?;
 
+searchPokedexResultID:
+SELECT * FROM PokedexResults WHERE id = ?;
+
 insertPokedexResult:
 INSERT OR REPLACE
-INTO PokedexResults (id , name, url, favorite) VALUES (?, ?, ?, ?);
+INTO PokedexResults (id , name, url) VALUES (?, ?, ?);
 
 deletePokedexResult:
 DELETE FROM PokedexResults WHERE id = ?;
@@ -26,5 +29,12 @@ DELETE FROM PokedexResults WHERE id = ?;
 updatePokedexResultFavorite:
 UPDATE PokedexResults SET favorite = ? WHERE id = ?;
 
+--updatePokedexResult:
+--UPDATE PokedexResults SET  name = ?, url = ? , favorite = ? WHERE id = ?;
+
 updatePokedexResult:
-UPDATE PokedexResults SET  name = ?, url = ? , favorite = ? WHERE id = ?;
+INSERT OR REPLACE
+INTO PokedexResults (id , name, url, favorite) VALUES (?, ?, ?, ?);
+
+existsPokedexResult:
+SELECT EXISTS(SELECT 1 FROM PokedexResults WHERE id = ? LIMIT 1);

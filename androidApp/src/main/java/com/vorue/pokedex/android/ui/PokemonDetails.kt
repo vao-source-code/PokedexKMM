@@ -24,11 +24,11 @@ class PokemonDetails : AppCompatActivity() {
         activityPokemonDetailsBinding = ActivityPokemonDetailsBinding.inflate(layoutInflater)
         setContentView(activityPokemonDetailsBinding.root)
         val name = intent.extras!!.getString("name")!!
-        val id = intent.extras!!.getLong("id")
+        val id = intent.extras!!.getInt("id")
 
-         pokemon = PokedexResults(id = id, name = name, url = "https://pokeapi.co/api/v2/pokemon/$id/")
+         pokemon = PokedexResults(id = id.toLong(), name = name, url = "https://pokeapi.co/api/v2/pokemon/$id/")
 
-        initPokemon(name, id)
+        initPokemon(name, id.toLong())
         initImage()
     }
 
