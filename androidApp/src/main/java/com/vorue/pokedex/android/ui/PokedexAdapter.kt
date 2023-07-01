@@ -1,6 +1,5 @@
 package com.vorue.pokedex.android.ui
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +10,13 @@ import com.vorue.pokedex.android.databinding.ItemPokedexBinding
 import com.vorue.pokedex.android.libraries.ImageBuilder
 import com.vorue.pokedex.android.libraries.StringFormatter
 
-class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener , val onsetFavoriteListener: RecyclerViewInterface.onItemSetFavoriteListener) :
-    RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder>() {
+class PokedexAdapter(
+    private val onclick: RecyclerViewInterface.OnItemClickListener,
+    private val onsetFavoriteListener: RecyclerViewInterface.OnItemSetFavoriteListener
+) : RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder>() {
 
     private var pokemonList = mutableListOf<PokedexResults>()
-    public val pokemonListOrigin = mutableListOf<PokedexResults>()
+    val pokemonListOrigin = mutableListOf<PokedexResults>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokedexViewHolder {
@@ -60,7 +61,7 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener , 
         if (results != null) {
             pokemonList.clear()
             pokemonList.addAll(results)
-        }else{
+        } else {
             pokemonList.clear()
             pokemonList.addAll(pokemonListOrigin)
         }
@@ -101,29 +102,25 @@ class PokedexAdapter( val  onclick: RecyclerViewInterface.OnItemClickListener , 
 
     fun setFavorite(position: Int) {
         pokemonList[position].favorite = !pokemonList[position].favorite
-
-                notifyDataSetChanged()
-
+        notifyDataSetChanged()
     }
 
 
     // mejorar view holder
     class PokedexViewHolder(
-        val binding: ItemPokedexBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        val binding: ItemPokedexBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(pokemon: PokedexResults) {
             binding.titleTextView.text =
                 StringFormatter.changeFirstLetterToUppercaseAndDeleteMiddleDash(pokemon.name)
-            Glide.with(this.itemView)
-                .load(ImageBuilder.buildPokemonImageByUrl(pokemon.url))
-                .placeholder(R.drawable.pokeball)
-                .error(R.drawable.pokeball) // cambiar icono
+            Glide.with(this.itemView).load(ImageBuilder.buildPokemonImageByUrl(pokemon.url))
+                .placeholder(R.drawable.pokeball).error(R.drawable.pokeball) // cambiar icono
                 .into(binding.iconImageView)
 
 
-            if(pokemon.favorite){
+            if (pokemon.favorite) {
                 binding.favoriteButton.setImageResource(R.drawable.icon_favorite_save)
-            }else{
+            } else {
                 binding.favoriteButton.setImageResource(R.drawable.icon_favorite)
             }
 

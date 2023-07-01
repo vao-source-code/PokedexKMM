@@ -7,7 +7,7 @@ interface RecyclerViewInterface {
 
     }
 
-    interface onItemSetFavoriteListener {
+    interface OnItemSetFavoriteListener {
         fun onItemSetFavorite(position: Int)
     }
 

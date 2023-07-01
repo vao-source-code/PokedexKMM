@@ -15,8 +15,10 @@ import kotlinx.serialization.json.Json
 
 class PokedexClient {
 
-
-
+    /*
+    La clase HttpClientProvider proporciona una instancia de HttpClient con configuraciones de registro y negociación de contenido.
+     El HttpClient permite realizar solicitudes HTTP, registrar las solicitudes y respuestas, y manejar objetos JSON.
+     */
     object HttpClientProvider {
 
         val httpClient = HttpClient {

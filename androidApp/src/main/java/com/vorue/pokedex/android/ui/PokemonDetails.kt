@@ -12,16 +12,12 @@ import com.vorue.pokedex.android.databinding.ActivityPokemonDetailsBinding
 
 class PokemonDetails : AppCompatActivity() {
 
+    /*--------------------- Variables -----------------------------------------------------------*/
     private lateinit var activityPokemonDetailsBinding: ActivityPokemonDetailsBinding
-
     private lateinit var pokemon: PokedexResults
-
     private val pokemonViewModel : PokemonViewModel by viewModels()
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
+    /*--------------------- Lyfe Cycle -----------------------------------------------------------*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +29,19 @@ class PokemonDetails : AppCompatActivity() {
          pokemon = PokedexResults(id = id, name = name, url = "https://pokeapi.co/api/v2/pokemon/$id/")
 
         initPokemon(name, id)
-
         initImage()
-
     }
+
+    /*--------------------- Override --------------------------------------------------------------*/
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+
+    /*--------------------- Private Methods -------------------------------------------------------*/
 
     private fun initPokemon(valor: String, id: Int) {
         //Buscar el pokemon y traer todos los datos
